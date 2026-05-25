@@ -9,5 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deploy Hook
+        env:
+          RENDER_URL: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
-          curl -f "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          if [ -z "$RENDER_URL" ]; then
+            echo "Erro: A variável RENDER_URL está vazia. Verifique os Secrets do GitHub."
+            exit 1
+          fi
+          curl -f "$RENDER_URL"
